@@ -19,8 +19,22 @@ const CONFIG_PATH = path.join(
 
 function syncPluginFiles() {
   try {
-    const pkgDir = path.dirname(fileURLToPath(import.meta.url));
+    let pkgDir;
     const home = process.env.HOME || process.env.USERPROFILE;
+    
+    // Try multiple ways to find package directory
+    if (process.env.BUN_INSTALL_CACHE_DIR) {
+      // Bun cache directory
+      pkgDir = path.join(process.env.BUN_INSTALL_CACHE_DIR, "node_modules", "@miloya", "oc-minimax-status");
+    } else if (process.env.npm_package_json) {
+      pkgDir = path.dirname(process.env.npm_package_json);
+    } else if (typeof import.meta !== "undefined" && import.meta.url) {
+      pkgDir = path.dirname(fileURLToPath(import.meta.url));
+    } else {
+      // Fallback: OpenCode uses ~/.cache/opencode/
+      pkgDir = path.join(home, ".cache", "opencode", "node_modules", "@miloya", "oc-minimax-status");
+    }
+    
     const plugins = path.join(home, ".config", "opencode", "plugins");
     const commands = path.join(home, ".config", "opencode", "commands");
 
