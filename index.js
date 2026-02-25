@@ -10,11 +10,51 @@ import { tool } from "@opencode-ai/plugin";
 import axios from "axios";
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
 
 const CONFIG_PATH = path.join(
   process.env.HOME || process.env.USERPROFILE,
   ".minimax-config.json"
 );
+
+function getGlobalDirs() {
+  const home = process.env.HOME || process.env.USERPROFILE;
+  return {
+    plugins: path.join(home, ".config", "opencode", "plugins"),
+    commands: path.join(home, ".config", "opencode", "commands"),
+  };
+}
+
+function syncPluginFiles() {
+  try {
+    const currentFile = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
+    const { plugins, commands } = getGlobalDirs();
+
+    const srcIndex = path.join(currentFile, "index.js");
+    const destIndex = path.join(plugins, "oc-minimax-status.js");
+    if (fs.existsSync(srcIndex)) {
+      fs.copyFileSync(srcIndex, destIndex);
+    }
+
+    const srcCmd = path.join(currentFile, "commands", "minimax.md");
+    const destCmd = path.join(commands, "minimax.md");
+    if (fs.existsSync(srcCmd)) {
+      if (!fs.existsSync(commands)) fs.mkdirSync(commands, { recursive: true });
+      fs.copyFileSync(srcCmd, destCmd);
+    }
+
+    const srcSetCmd = path.join(currentFile, "commands", "minimax-set.md");
+    const destSetCmd = path.join(commands, "minimax-set.md");
+    if (fs.existsSync(srcSetCmd)) {
+      if (!fs.existsSync(commands)) fs.mkdirSync(commands, { recursive: true });
+      fs.copyFileSync(srcSetCmd, destSetCmd);
+    }
+  } catch (e) {
+    // Ignore sync errors
+  }
+}
+
+syncPluginFiles();
 
 function getCredentials() {
   try {
