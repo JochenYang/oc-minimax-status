@@ -1,11 +1,15 @@
 <h1 align="center">MiniMax Status - OpenCode 插件</h1>
 
-[![npm version](https://img.shields.io/npm/v/@miloya/oc-minimax-status?color=blue)](https://www.npmjs.com/package/@miloya/oc-minimax-status)
-[![npm downloads](https://img.shields.io/npm/dw/@miloya/oc-minimax-status?color=green)](https://www.npmjs.com/package/@miloya/oc-minimax-status)
-[![license](https://img.shields.io/npm/l/@miloya/oc-minimax-status?color=orange)](LICENSE)
-[![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-blue?color=blue)](https://opencode.ai)
+<p align="center">
+  <a href="https://www.npmjs.com/package/@miloya/oc-minimax-status"><img src="https://img.shields.io/npm/v/@miloya/oc-minimax-status?color=blue" alt="npm version"></a>
+  <a href="https://www.npmjs.com/package/@miloya/oc-minimax-status"><img src="https://img.shields.io/npm/dw/@miloya/oc-minimax-status?color=green" alt="npm downloads"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/npm/l/@miloya/oc-minimax-status?color=orange" alt="license"></a>
+  <a href="https://opencode.ai"><img src="https://img.shields.io/badge/Platform-Windows%20%7C%20macOS%20%7C%20Linux-blue?color=blue" alt="Platform"></a>
+</p>
 
-> MiniMax Coding Plan 用量查询插件 for OpenCode - 一键安装自动配置
+<p align="center">
+  <em>MiniMax Coding Plan 用量查询插件 for OpenCode - 一键安装自动配置</em>
+</p>
 
 ---
 
