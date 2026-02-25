@@ -29,6 +29,11 @@ function getCommandDir() {
 }
 
 function getPackageDir() {
+  // When running postinstall for global install, use npm_package_json env var
+  const pkgJson = process.env.npm_package_json;
+  if (pkgJson) {
+    return path.dirname(pkgJson);
+  }
   return process.cwd();
 }
 
