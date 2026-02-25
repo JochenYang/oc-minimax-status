@@ -88,17 +88,21 @@ async function init() {
   fs.copyFileSync(srcIndex, destIndex);
   console.log(`   [OK] Copied ${PLUGIN_NAME}.js`);
 
-  // Copy command file
+  // Copy command files
   const commandDir = getCommandDir();
-  const srcCommand = path.join(packageDir, "commands", "minimax.md");
-  const destCommand = path.join(commandDir, "minimax.md");
+  
+  if (!fs.existsSync(commandDir)) {
+    fs.mkdirSync(commandDir, { recursive: true });
+  }
 
-  if (fs.existsSync(srcCommand)) {
-    if (!fs.existsSync(commandDir)) {
-      fs.mkdirSync(commandDir, { recursive: true });
+  const cmdFiles = ["minimax.md", "minimax-set.md"];
+  for (const cmdFile of cmdFiles) {
+    const srcCommand = path.join(packageDir, "commands", cmdFile);
+    const destCommand = path.join(commandDir, cmdFile);
+    if (fs.existsSync(srcCommand)) {
+      fs.copyFileSync(srcCommand, destCommand);
+      console.log(`   [OK] Copied /${cmdFile.replace(".md", "")} command`);
     }
-    fs.copyFileSync(srcCommand, destCommand);
-    console.log(`   [OK] Copied /minimax command`);
   }
 
   console.log("-- Installing dependencies...");
