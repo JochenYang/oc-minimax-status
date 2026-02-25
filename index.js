@@ -27,30 +27,36 @@ function getGlobalDirs() {
 
 function syncPluginFiles() {
   try {
-    const currentFile = path.dirname(path.dirname(fileURLToPath(import.meta.url)));
-    const { plugins, commands } = getGlobalDirs();
+    const currentFile = path.dirname(fileURLToPath(import.meta.url));
+    const home = process.env.HOME || process.env.USERPROFILE;
+    const plugins = path.join(home, ".config", "opencode", "plugins");
+    const commands = path.join(home, ".config", "opencode", "commands");
 
+    // Copy index.js to plugins
     const srcIndex = path.join(currentFile, "index.js");
     const destIndex = path.join(plugins, "oc-minimax-status.js");
     if (fs.existsSync(srcIndex)) {
+      if (!fs.existsSync(plugins)) fs.mkdirSync(plugins, { recursive: true });
       fs.copyFileSync(srcIndex, destIndex);
     }
 
-    const srcCmd = path.join(currentFile, "commands", "minimax.md");
-    const destCmd = path.join(commands, "minimax.md");
-    if (fs.existsSync(srcCmd)) {
+    // Copy commands
+    const srcCmdDir = path.join(currentFile, "commands");
+    if (fs.existsSync(srcCmdDir)) {
       if (!fs.existsSync(commands)) fs.mkdirSync(commands, { recursive: true });
-      fs.copyFileSync(srcCmd, destCmd);
-    }
-
-    const srcSetCmd = path.join(currentFile, "commands", "minimax-set.md");
-    const destSetCmd = path.join(commands, "minimax-set.md");
-    if (fs.existsSync(srcSetCmd)) {
-      if (!fs.existsSync(commands)) fs.mkdirSync(commands, { recursive: true });
-      fs.copyFileSync(srcSetCmd, destSetCmd);
+      
+      const files = fs.readdirSync(srcCmdDir);
+      for (const file of files) {
+        if (file.endsWith(".md")) {
+          fs.copyFileSync(
+            path.join(srcCmdDir, file),
+            path.join(commands, file)
+          );
+        }
+      }
     }
   } catch (e) {
-    // Ignore sync errors
+    console.error("Sync error:", e.message);
   }
 }
 
