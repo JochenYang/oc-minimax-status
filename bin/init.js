@@ -25,7 +25,7 @@ function getOpencodeConfigPath() {
 
 function getCommandDir() {
   const home = process.env.HOME || process.env.USERPROFILE;
-  return path.join(home, ".config", "opencode", "command");
+  return path.join(home, ".config", "opencode", "commands");
 }
 
 function getPackageDir() {
