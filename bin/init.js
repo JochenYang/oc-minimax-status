@@ -90,7 +90,7 @@ async function init() {
 
   // Copy command file
   const commandDir = getCommandDir();
-  const srcCommand = path.join(packageDir, "command", "minimax.md");
+  const srcCommand = path.join(packageDir, "commands", "minimax.md");
   const destCommand = path.join(commandDir, "minimax.md");
 
   if (fs.existsSync(srcCommand)) {
