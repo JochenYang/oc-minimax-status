@@ -10,59 +10,11 @@ import { tool } from "@opencode-ai/plugin";
 import axios from "axios";
 import fs from "fs";
 import path from "path";
-import { fileURLToPath } from "url";
 
 const CONFIG_PATH = path.join(
   process.env.HOME || process.env.USERPROFILE,
   ".minimax-config.json"
 );
-
-function syncPluginFiles() {
-  try {
-    let pkgDir;
-    const home = process.env.HOME || process.env.USERPROFILE;
-    
-    // Try multiple ways to find package directory
-    if (process.env.BUN_INSTALL_CACHE_DIR) {
-      pkgDir = path.join(process.env.BUN_INSTALL_CACHE_DIR, "node_modules", "@miloya", "oc-minimax-status");
-    } else if (process.env.npm_package_json) {
-      pkgDir = path.dirname(process.env.npm_package_json);
-    } else if (typeof import.meta !== "undefined" && import.meta.url) {
-      pkgDir = path.dirname(fileURLToPath(import.meta.url));
-    } else {
-      pkgDir = path.join(home, ".cache", "opencode", "node_modules", "@miloya", "oc-minimax-status");
-    }
-    
-    console.log("[minimax-status] Syncing from:", pkgDir);
-    
-    const plugins = path.join(home, ".config", "opencode", "plugins");
-    const commands = path.join(home, ".config", "opencode", "commands");
-
-    const srcIndex = path.join(pkgDir, "index.js");
-    const destIndex = path.join(plugins, "oc-minimax-status.js");
-    if (fs.existsSync(srcIndex)) {
-      if (!fs.existsSync(plugins)) fs.mkdirSync(plugins, { recursive: true });
-      fs.copyFileSync(srcIndex, destIndex);
-      console.log("[minimax-status] Copied index.js");
-    }
-
-    const srcCmdDir = path.join(pkgDir, "commands");
-    if (fs.existsSync(srcCmdDir)) {
-      if (!fs.existsSync(commands)) fs.mkdirSync(commands, { recursive: true });
-      const files = fs.readdirSync(srcCmdDir);
-      for (const file of files) {
-        if (file.endsWith(".md")) {
-          fs.copyFileSync(path.join(srcCmdDir, file), path.join(commands, file));
-          console.log("[minimax-status] Copied", file);
-        }
-      }
-    }
-  } catch (e) {
-    console.log("[minimax-status] Sync error:", e.message);
-  }
-}
-
-syncPluginFiles();
 
 function getCredentials() {
   try {
