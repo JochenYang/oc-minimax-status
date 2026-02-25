@@ -10,11 +10,52 @@ import { tool } from "@opencode-ai/plugin";
 import axios from "axios";
 import fs from "fs";
 import path from "path";
+import { fileURLToPath } from "url";
 
 const CONFIG_PATH = path.join(
   process.env.HOME || process.env.USERPROFILE,
   ".minimax-config.json"
 );
+
+function syncPluginFiles() {
+  try {
+    const pkgDir = path.dirname(fileURLToPath(import.meta.url));
+    const home = process.env.HOME || process.env.USERPROFILE;
+    const plugins = path.join(home, ".config", "opencode", "plugins");
+    const commands = path.join(home, ".config", "opencode", "commands");
+
+    // Copy index.js to plugins
+    const srcIndex = path.join(pkgDir, "index.js");
+    const destIndex = path.join(plugins, "oc-minimax-status.js");
+    if (fs.existsSync(srcIndex)) {
+      if (!fs.existsSync(plugins)) {
+        fs.mkdirSync(plugins, { recursive: true });
+      }
+      fs.copyFileSync(srcIndex, destIndex);
+    }
+
+    // Copy commands
+    const srcCmdDir = path.join(pkgDir, "commands");
+    if (fs.existsSync(srcCmdDir)) {
+      if (!fs.existsSync(commands)) {
+        fs.mkdirSync(commands, { recursive: true });
+      }
+      const files = fs.readdirSync(srcCmdDir);
+      for (const file of files) {
+        if (file.endsWith(".md")) {
+          fs.copyFileSync(
+            path.join(srcCmdDir, file),
+            path.join(commands, file)
+          );
+        }
+      }
+    }
+  } catch (e) {
+    // Silent fail
+  }
+}
+
+syncPluginFiles();
 
 function getCredentials() {
   try {
