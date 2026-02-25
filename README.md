@@ -28,8 +28,9 @@ npm install @miloya/oc-minimax-status
 
 安装过程会自动：
 1. 复制插件到全局插件目录 (~/.config/opencode/plugins)
-2. 添加插件到 opencode.json 配置
-3. 显示使用说明
+2. 复制 /minimax 命令到全局命令目录 (~/.config/opencode/command)
+3. 添加插件到 opencode.json 配置
+4. 显示使用说明
 
 ## 配置认证
 
@@ -62,6 +63,7 @@ npm install @miloya/oc-minimax-status
 查看 minimax 用量
 我的用量还有多少
 minimax 状态
+/minimax
 ```
 
 ### 管理认证（自然语言）

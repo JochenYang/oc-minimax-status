@@ -23,6 +23,11 @@ function getOpencodeConfigPath() {
   return path.join(home, ".config", "opencode", "opencode.json");
 }
 
+function getCommandDir() {
+  const home = process.env.HOME || process.env.USERPROFILE;
+  return path.join(home, ".config", "opencode", "command");
+}
+
 function getPackageDir() {
   return process.cwd();
 }
@@ -83,6 +88,19 @@ async function init() {
   fs.copyFileSync(srcIndex, destIndex);
   console.log(`   [OK] Copied ${PLUGIN_NAME}.js`);
 
+  // Copy command file
+  const commandDir = getCommandDir();
+  const srcCommand = path.join(packageDir, "command", "minimax.md");
+  const destCommand = path.join(commandDir, "minimax.md");
+
+  if (fs.existsSync(srcCommand)) {
+    if (!fs.existsSync(commandDir)) {
+      fs.mkdirSync(commandDir, { recursive: true });
+    }
+    fs.copyFileSync(srcCommand, destCommand);
+    console.log(`   [OK] Copied /minimax command`);
+  }
+
   console.log("-- Installing dependencies...");
   try {
     execSync("npm install axios", { 
@@ -102,8 +120,8 @@ async function init() {
   console.log("Usage:");
   console.log("   1. Restart OpenCode");
   console.log("   2. In OpenCode, just say:");
-  console.log("      '@minimax status'");
-  console.log("      or '@minimax 查看用量'");
+  console.log("      '/minimax' or '@minimax status'");
+  console.log("      or '查看 minimax 用量'");
   console.log("");
   console.log("   For more info, see README.md\n");
 }
