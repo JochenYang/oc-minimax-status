@@ -1,0 +1,38 @@
+{
+  "name": "@miloya/oc-minimax-status",
+  "version": "0.0.3",
+  "description": "MiniMax Coding Plan 用量查询插件 for OpenCode - 一键安装自动配置",
+  "main": "index.js",
+  "type": "module",
+  "keywords": ["opencode", "plugin", "minimax", "claude-code", "usage"],
+  "author": "Jochen",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/JochenYang/oc-minimax-status"
+  },
+  "files": [
+    "index.js",
+    "bin/",
+    "README.md",
+    "LICENSE"
+  ],
+  "dependencies": {
+    "axios": "^1.6.0"
+  },
+  "peerDependencies": {
+    "@opencode-ai/plugin": "*"
+  },
+  "engines": {
+    "opencode": ">=1.0.0"
+  },
+  "scripts": {
+    "postinstall": "node bin/init.js"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "bin": {
+    "minimax-status-init": "./bin/init.js"
+  }
+}
