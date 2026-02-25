@@ -23,7 +23,7 @@
 ## 安装
 
 ```bash
-npm install @miloya/oc-minimax-status
+npm install -g @miloya/oc-minimax-status
 ```
 
 安装过程会自动：
@@ -58,7 +58,7 @@ npm install @miloya/oc-minimax-status
 
 在 OpenCode 对话框中直接说**自然语言**即可（不是命令行），插件会自动识别并调用对应功能：
 
-### 查询用量（自然语言）
+### 查询用量（自然语言或命令）
 ```
 查看 minimax 用量
 我的用量还有多少
@@ -66,10 +66,11 @@ minimax 状态
 /minimax
 ```
 
-### 管理认证（自然语言）
+### 管理认证（自然语言或命令）
 ```
 查看 minimax 认证
 设置 minimax 认证 tokenxxx groupIdxxx
+/minimax set tokenxxx groupIdxxx
 ```
 
 ### 直接调用工具名

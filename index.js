@@ -86,17 +86,17 @@ function parseUsageData(apiData) {
 function formatOutput(data) {
   const { modelName, used, total, remaining, percentage, resetTime, hours, minutes } = data;
   
-  const bar = "#".repeat(Math.floor(percentage / 10)) + "-".repeat(10 - Math.floor(percentage / 10));
-  const timeText = hours > 0 ? `${hours}h ${minutes}m` : `${minutes}min`;
+  const bar = "█".repeat(Math.floor(percentage / 10)) + "░".repeat(10 - Math.floor(percentage / 10));
+  const timeText = hours > 0 ? `${hours}小时${minutes}分钟` : `${minutes}分钟`;
 
-  return `MiniMax Claude Code 用量状态
-==============================
-Model: ${modelName}
+  return `MiniMax Coding Plan 用量状态
+----------------------------------------
+模型: ${modelName}
 已用: ${used.toLocaleString()} / ${total.toLocaleString()}
 进度: [${bar}] ${percentage}%
-剩余: ${remaining.toLocaleString()}
-重置: ${resetTime} (${timeText})
-==============================`;
+剩余: ${remaining.toLocaleString()} 次
+重置: ${resetTime} (约${timeText})
+----------------------------------------`;
 }
 
 export const MiniMaxStatusPlugin = async (ctx) => {
