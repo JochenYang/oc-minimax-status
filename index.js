@@ -71,6 +71,24 @@ function parseUsageData(apiData) {
     minute: "2-digit",
   });
 
+  // 周用量计算
+  const weeklyRemaining = m.current_weekly_usage_count;
+  const weeklyTotal = m.current_weekly_total_count;
+  const weeklyUsed = weeklyTotal - weeklyRemaining;
+  const weeklyPercentage = Math.floor((weeklyUsed / weeklyTotal) * 100);
+  const weeklyRemainingMs = m.weekly_remains_time;
+  const weeklyDays = Math.floor(weeklyRemainingMs / (1000 * 60 * 60 * 24));
+  const weeklyHours = Math.floor((weeklyRemainingMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+
+  const weeklyResetTime = new Date(m.weekly_end_time).toLocaleString("zh-CN", {
+    timeZone: "Asia/Shanghai",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+
   return {
     modelName: m.model_name,
     used,
@@ -80,22 +98,35 @@ function parseUsageData(apiData) {
     resetTime,
     hours,
     minutes,
+    weeklyUsed,
+    weeklyTotal,
+    weeklyPercentage,
+    weeklyDays,
+    weeklyHours,
+    weeklyResetTime,
   };
 }
 
 function formatOutput(data) {
-  const { modelName, used, total, remaining, percentage, resetTime, hours, minutes } = data;
-  
+  const { modelName, used, total, remaining, percentage, resetTime, hours, minutes, weeklyUsed, weeklyTotal, weeklyPercentage, weeklyDays, weeklyHours, weeklyResetTime } = data;
+
   const bar = "█".repeat(Math.floor(percentage / 10)) + "░".repeat(10 - Math.floor(percentage / 10));
   const timeText = hours > 0 ? `${hours}小时${minutes}分钟` : `${minutes}分钟`;
+
+  const weeklyBar = "█".repeat(Math.floor(weeklyPercentage / 10)) + "░".repeat(10 - Math.floor(weeklyPercentage / 10));
+  const weeklyTimeText = weeklyDays > 0 ? `${weeklyDays}天${weeklyHours}小时` : `${weeklyHours}小时`;
 
   return `MiniMax Coding Plan 用量状态
 ----------------------------------------
 模型: ${modelName}
-已用: ${used.toLocaleString()} / ${total.toLocaleString()}
+已用(5h): ${used.toLocaleString()} / ${total.toLocaleString()}
 进度: [${bar}] ${percentage}%
-剩余: ${remaining.toLocaleString()} 次
+剩余(5h): ${remaining.toLocaleString()} 次
 重置: ${resetTime} (约${timeText})
+----------------------------------------
+周用量: ${weeklyUsed.toLocaleString()} / ${weeklyTotal.toLocaleString()}
+周进度: [${weeklyBar}] ${weeklyPercentage}%
+周重置: ${weeklyResetTime} (约${weeklyTimeText})
 ----------------------------------------`;
 }
 

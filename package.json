@@ -1,6 +1,6 @@
 {
   "name": "@miloya/oc-minimax-status",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "MiniMax Coding Plan 用量查询插件 for OpenCode - 一键安装自动配置",
   "main": "index.js",
   "type": "module",
@@ -34,6 +34,7 @@
     "access": "public"
   },
   "bin": {
-    "minimax-status-init": "./bin/init.js"
+    "minimax-status-init": "./bin/init.js",
+    "minimax-status-update": "./bin/update.js"
   }
 }
