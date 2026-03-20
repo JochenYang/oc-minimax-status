@@ -28,15 +28,14 @@ function getCredentials() {
 }
 
 function saveCredentials(token, groupId) {
-  const config = { token, groupId };
+  const config = { token };
   fs.writeFileSync(CONFIG_PATH, JSON.stringify(config, null, 2));
 }
 
-async function fetchUsageStatus(token, groupId) {
+async function fetchUsageStatus(token) {
   const response = await axios.get(
     "https://www.minimaxi.com/v1/api/openplatform/coding_plan/remains",
     {
-      params: { GroupId: groupId },
       headers: {
         Authorization: `Bearer ${token}`,
         Accept: "application/json",
@@ -142,29 +141,28 @@ export const MiniMaxStatusPlugin = async (ctx) => {
           try {
             const credentials = getCredentials();
             
-            if (!credentials?.token || !credentials?.groupId) {
+            if (!credentials?.token) {
               return `请先配置认证信息！
 
 配置方式：
 1. 如果已安装 Claude Code 版 minimax-status，配置文件已自动共享，无需重复配置
 2. 或手动创建 ~/.minimax-config.json:
 {
-  "token": "your-api-token",
-  "groupId": "your-group-id"
+  "token": "your-api-token"
 }
 
-获取 token 和 groupId:
+获取 token:
 1. 登录 https://platform.minimaxi.com/user-center/payment/coding-plan
-2. 获取 API Key 和 Group ID`;
+2. 获取 API Key`;
             }
 
-            const apiData = await fetchUsageStatus(credentials.token, credentials.groupId);
+            const apiData = await fetchUsageStatus(credentials.token);
             const usageData = parseUsageData(apiData);
             
             return formatOutput(usageData);
           } catch (error) {
             if (error.response?.status === 401) {
-              return "认证失败，请检查 token 和 groupId 是否正确";
+              return "认证失败，请检查 token 是否正确";
             }
             if (error.code === "ECONNABORTED") {
               return "请求超时，请检查网络连接";
@@ -184,19 +182,18 @@ export const MiniMaxStatusPlugin = async (ctx) => {
         async execute(args, context) {
           if (args.action === "get") {
             const creds = getCredentials();
-            if (!creds || !creds.token || !creds.groupId) {
-              return "未配置认证信息。请使用 action=set 设置 token 和 groupId";
+            if (!creds || !creds.token) {
+              return "未配置认证信息。请使用 action=set 设置 token";
             }
             return `当前认证信息:
-- Token: ${creds.token ? "****" + creds.token.slice(-4) : "未设置"}
-- GroupID: ${creds.groupId || "未设置"}`;
+- Token: ${creds.token ? "****" + creds.token.slice(-4) : "未设置"}`;
           }
-          
+
           if (args.action === "set") {
-            if (!args.token || !args.groupId) {
-              return "设置认证需要提供 token 和 groupId 两个参数";
+            if (!args.token) {
+              return "设置认证需要提供 token 参数";
             }
-            saveCredentials(args.token, args.groupId);
+            saveCredentials(args.token, args.groupId || null);
             return "认证信息已保存到 ~/.minimax-config.json";
           }
         },

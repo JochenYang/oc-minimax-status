@@ -45,15 +45,14 @@ npm install -g @miloya/oc-minimax-status
 
 ```json
 {
-  "token": "your-api-token",
-  "groupId": "your-group-id"
+  "token": "your-api-token"
 }
 ```
 
-### 如何获取 token 和 groupId
+### 如何获取 token
 
 1. 登录 [https://platform.minimaxi.com/user-center/payment/coding-plan](https://platform.minimaxi.com/user-center/payment/coding-plan)
-2. 获取 API Key 和 Group ID
+2. 获取 API Key
 
 ## 使用方法
 
@@ -78,7 +77,7 @@ minimax 状态
 ```
 minimax_status
 minimax_auth action=get
-minimax_auth action=set token=xxx groupId=xxx
+minimax_auth action=set token=xxx
 ```
 
 ## 输出示例
@@ -109,13 +108,12 @@ MiniMax Coding Plan 用量状态
 1. 如果已安装 Claude Code 版 minimax-status，配置文件已自动共享，无需重复配置
 2. 或手动创建 ~/.minimax-config.json:
 {
-  "token": "your-api-token",
-  "groupId": "your-group-id"
+  "token": "your-api-token"
 }
 
-获取 token 和 groupId:
+获取 token:
 1. 登录 https://platform.minimaxi.com/user-center/payment/coding-plan
-2. 获取 API Key 和 Group ID
+2. 获取 API Key
 ```
 
 ## 相关项目
